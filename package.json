@@ -1,0 +1,29 @@
+{
+  "name": "pitorrentstream",
+  "version": "0.0.1",
+  "description": "Stream torrents in your raspberry pi",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enriquefynn/pitorrentstream.git"
+  },
+  "keywords": [
+    "stream",
+    "torrent",
+    "rpi"
+  ],
+  "author": "Fynn",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/enriquefynn/pitorrentstream/issues"
+  },
+  "homepage": "https://github.com/enriquefynn/pitorrentstream#readme",
+  "dependencies": {
+    "bluebird": "^3.1.1",
+    "socket.io": "^1.4.3",
+    "torrent-stream": "enriquefynn/torrent-stream.git"
+  }
+}

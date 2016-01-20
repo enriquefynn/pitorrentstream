@@ -6,7 +6,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket){
     
     self.server_status = {status: 'Disconnected', class: 'error'};
     self.files = [];
-    self.selected_file = 0;
+    self.selected_file = '';
 
     function calc_completed(file)
     {
@@ -50,7 +50,24 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket){
     };
     
     this.select = function(file){
+        //socket.emit('stream_file', file);
+        self.selected_file = file;
+    };
+
+    this.stream = function(file){
         socket.emit('stream_file', file);
     };
-    
+
+    this.download = function(file){
+        //socket.emit('resume_file', file);
+    };
+
+    this.pause = function(file){
+        //socket.emit('pause_file', file);
+    };
+
+    this.remove = function(file){
+        //socket.emit('remove_file', file);
+    };
+
 }]);

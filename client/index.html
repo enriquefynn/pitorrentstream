@@ -29,6 +29,10 @@
             Status: {{torrent.server_status.status}}
             </div>
         </h4>
+            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.stream(torrent.selected_file)">Stream</button>
+            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.download(torrent.selected_file)">Download</button>
+            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.pause(torrent.selected_file)">Pause</button>
+            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.remove(torrent.selected_file)">Remove</button>
         <h3>Currently selected:</h3>
         <script src="js/jquery.min.js"></script>
         <script src="./js/bower_components/angular/angular.js"></script>

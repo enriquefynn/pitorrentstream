@@ -4,6 +4,7 @@ var fs = require('fs');
 var TAG = 'SOCKET.IO';
 var torrent = require('./torrent');
 var promise = require('bluebird');
+var numeral = require('numeral');
 
 var IO = function(app, config){
     var io = require('socket.io')(app);
@@ -24,17 +25,18 @@ var IO = function(app, config){
 
             socket.emit('cache', cache);
 
-            var on_download = function(piece){
+            var on_download = function(data){
                 for (var file in cache.files)
                 {
-                    if (piece >= cache.files[file].startPiece && 
-                            piece <= cache.files[file].endPiece)
+                    if (data.piece >= cache.files[file].startPiece && 
+                            data.piece <= cache.files[file].endPiece)
                     {
-                        cache.files[file].pieces.push(piece);
+                        cache.files[file].pieces.push(data.piece);
                     }
                 }
                 //FIXME: Be more connection friendly
-                io.emit('piece', piece);
+                data.speed = numeral(data.speed).format('0.0b')
+                io.emit('piece', data);
             }
 
             socket.on('start', function(magnet){
@@ -49,8 +51,8 @@ var IO = function(app, config){
                 });
             });
 
-            socket.on('stream_file', function(file){
-                torrent.start_stream(file);
+            socket.on('select_file', function(file){
+                torrent.select_file(file);
             });
         });
     }

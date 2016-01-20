@@ -33,16 +33,18 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket){
             self.files[file].completed = calc_completed(file);
     });
 
-    socket.on('piece', function(piece){
+    socket.on('piece', function(data){
+        //console.log(data);
         for (var file in self.files)
         {
-             if (piece >= self.files[file].startPiece && piece <= self.files[file].endPiece)
+             if (data.piece >= self.files[file].startPiece && data.piece <= self.files[file].endPiece)
              {
-                self.files[file].pieces.push(piece);
+                self.files[file].pieces.push(data.piece);
                 self.files[file].completed = calc_completed(file);
                 break;
              }
         }
+        self.download_speed = data.speed.toLowerCase() + '/s';
     });
 
     this.start = function(magnet){
@@ -50,7 +52,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket){
     };
     
     this.select = function(file){
-        //socket.emit('stream_file', file);
+        socket.emit('select_file', file);
         self.selected_file = file;
     };
 

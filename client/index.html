@@ -21,12 +21,17 @@
         </div>
         </form>
         <h4>
-            <div class="alert" role="alert" 
+            <div class="alert row" role="alert" 
                 ng-class="{'alert-success' : torrent.server_status.class == 'success',
                 'alert-danger' : torrent.server_status.class == 'error',
                 'alert-info' : torrent.server_status.class == 'information'}"
             >
-            Status: {{torrent.server_status.status}}
+                <div class="col-xs-6">
+                    Status: {{torrent.server_status.status}}
+                </div>
+                <div class="col-xs-6 text-right">
+                    Speed: {{torrent.download_speed || '0kb/s'}}
+                </div>
             </div>
         </h4>
             <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.stream(torrent.selected_file)">Stream</button>

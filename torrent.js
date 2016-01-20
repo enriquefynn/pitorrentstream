@@ -23,7 +23,9 @@ module.exports = {
                 });
                 files.resolve(file_hash);
             });
-            engine.on('download', cb);
+            engine.on('download', function(piece){
+                cb({piece: piece, speed: engine.swarm.downloadSpeed()});
+            });
         }
         catch(err){
             files.reject(err);
@@ -31,7 +33,7 @@ module.exports = {
         return files.promise;
     },
 
-    start_stream : function(filename){
+    select_file : function(filename){
         for (var i = 0; i < engine.files.length; ++i)
             if (filename == engine.files[i].name)
             {

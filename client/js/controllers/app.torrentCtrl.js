@@ -16,8 +16,10 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     function calc_completed(file)
     {
-        var completed = self.files[file].pieces.length /
-                    (self.files[file].endPiece - self.files[file].startPiece);
+        var pdiff = self.files[file].endPiece - self.files[file].startPiece;
+        var completed = 0;
+        if(pdiff != 0)
+            completed = (self.files[file].pieces.length / pdiff);
         completed = Math.round(completed * 100);
         if (completed > 100)
             completed = 100;

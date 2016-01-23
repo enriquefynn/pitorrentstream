@@ -144,15 +144,13 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     this.fetch_all_toggle = function()
     {
-        if(self.fetch_all)
+        for(var file in self.files)
         {
-            for(var file in self.files)
+            if(file != self.selected_file.name)
             {
-                if(file != self.selected_file.name)
-                {
-                    self.files[file].fetch = true;
+                self.files[file].fetch = self.fetch_all;
+                if(self.fetch_all)
                     self.download(self.files[file]);
-                }
             }
         }
     };

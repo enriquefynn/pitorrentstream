@@ -7,8 +7,18 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <title>Torrent Streaming</title>
 
+        <script src="js/jquery.min.js"></script>
+        <script src="./js/bower_components/angular/angular.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/socket.io.js"></script>
+
+        <script src="./js/controllers/app.factory.js"></script>
+        <script src="./js/controllers/app.torrentCtrl.js"></script>
+        <script src="./js/controllers/controllers.js"></script>
+
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 
     </head>
     <body ng-controller="torrentCtrl as torrent">
@@ -34,28 +44,39 @@
                 </div>
             </div>
         </h4>
-            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.stream(torrent.selected_file)">Stream</button>
-            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.download(torrent.selected_file)">Download</button>
-            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.pause(torrent.selected_file)">Pause</button>
-            <button ng-disabled="torrent.selected_file === ''" ng-click="torrent.remove(torrent.selected_file)">Remove</button>
-        <h3>Currently selected:</h3>
-        <script src="js/jquery.min.js"></script>
-        <script src="./js/bower_components/angular/angular.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/socket.io.js"></script>
-
-        <script src="./js/controllers/app.factory.js"></script>
-        <script src="./js/controllers/app.torrentCtrl.js"></script>
-        <script src="./js/controllers/controllers.js"></script>
-        <ul class="list-group">
-            <div ng-repeat="file in torrent.files | orderObjectBy: 'name'">
-            <button class="list-group-item" type="button" 
-                ng-click="torrent.select(file.name)">{{file.name}}</button>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: {{file.completed}}%;">{{file.completed}}%
-                    </div>
-                </div>
+        <div ng-show="torrent.selected_file != undefined">
+            <h3>Currently streaming:</h3>
+            <br>
+            {{torrent.selected_file.name}}
+            <br>
+            <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default" aria-label="Play">
+                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" aria-label="Pause">
+                    <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+                </button>
+                 <button type="button" class="btn btn-default" aria-label="StepBackward">
+                     <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
+                </button>
+                 <button type="button" class="btn btn-default" aria-label="StepForward">
+                     <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </button>
             </div>
-        </ul>
+        </div>
+        <div ng-show="torrent.n_of_files > 0">
+            <h3>Download list:</h3>
+            <input type="checkbox" ng-model="torrent.fetch_all" ng-change="torrent.fetch_all_toggle()">Fetch all</input>
+            <ul class="list-group">
+                <div ng-repeat="file in torrent.files | orderObjectBy: 'name'">
+                    <button class="list-group-item" type="button" ng-click="torrent.select(file)">Stream: {{file.name}}</button>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: {{file.completed}}%;">{{file.completed}}%
+                        </div>
+                    </div>
+                    <input type="checkbox" ng-model="file.fetch" ng-change="torrent.fetch_toggle(file)">Fetch</input>
+                </div>
+            </ul>
+        </div>
     </body>
 </html>

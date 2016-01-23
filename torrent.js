@@ -18,6 +18,7 @@ module.exports = {
                         path: file.path,
                         startPiece: file.offsetPiece,
                         endPiece: file.endPiece,
+                        length: file.length,
                         pieces: []
                     };
                 });

@@ -54,6 +54,10 @@ var IO = function(app, config){
             socket.on('select_file', function(file){
                 torrent.select_file(file);
             });
+
+            socket.on('deselect_file', function(file){
+                torrent.deselect_file(file);
+            });
         });
     }
     catch(err){

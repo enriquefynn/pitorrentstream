@@ -111,12 +111,12 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     this.download = function(file)
     {
-       //socket.emit('select_file', file.name);
+       socket.emit('select_file', file.name);
     };
 
     this.pause = function(file)
     {
-        //socket.emit('pause_file', file.name);
+        socket.emit('deselect_file', file.name);
     };
 
     this.remove = function(file)
@@ -130,7 +130,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             self.download(file)
         else
         {
-            //socket.emit('pause_file', file.name);
+            self.pause(file)
             self.fetch_all = false;
             if(file == self.selected_file)
                 self.selected_file = undefined;

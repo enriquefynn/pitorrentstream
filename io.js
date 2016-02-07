@@ -65,9 +65,24 @@ var IO = function(app, config){
                 });
             });
             
-            //Player options
+            //Player options TODO: Move somewhere
             socket.on('start_player', function(url){
                 omxplayer.play(url);
+            });
+            socket.on('pause_player', function(){
+                omxplayer.pause();
+            });
+            socket.on('forward_player', function(){
+                omxplayer.forward();
+            });
+            socket.on('backward_player', function(){
+                omxplayer.backward();
+            });
+            socket.on('volume_up', function(){
+                omxplayer.volume_up();
+            });
+            socket.on('volume_down', function(){
+                omxplayer.volume_down();
             });
         });
     }

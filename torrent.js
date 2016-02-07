@@ -58,6 +58,7 @@ module.exports = {
         if (stream_server != undefined)
             stream_server.close();
         stream_server = http.createServer();
+        engine.files[file_i].select();
         stream_server.on('request', function(request, response){
 
             if (request.headers.origin) 

@@ -1,5 +1,5 @@
 'use strict';
-var spawn = require('child_process').spawnSync;
+var spawn = require('child_process').spawn;
 var omx;
 
 function kill_player(){

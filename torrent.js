@@ -55,6 +55,8 @@ module.exports = {
             if (filename == engine.files[file_i].name)
                 break;
 
+        if (stream_server != undefined)
+            stream_server.close();
         stream_server = http.createServer();
         stream_server.on('request', function(request, response){
 

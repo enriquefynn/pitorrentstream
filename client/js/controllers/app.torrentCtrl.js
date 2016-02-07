@@ -87,8 +87,6 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
                 cache.address_streaming.addr.port;
             self.selected_file = cache.address_streaming.file;
         }
-
-
     });
 
     socket.on('piece', function(data)
@@ -175,5 +173,11 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             }
         }
     };
+
+    this.start_player = function()
+    {
+        socket.emit('start_player', self.address_streaming);
+    }
+
 }]);
 

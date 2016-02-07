@@ -5,6 +5,7 @@ var TAG = 'SOCKET.IO';
 var torrent = require('./torrent');
 var promise = require('bluebird');
 var numeral = require('numeral');
+var omxplayer = require('./omxplayer');
 
 var IO = function(app, config){
     var io = require('socket.io')(app);
@@ -62,6 +63,11 @@ var IO = function(app, config){
                     cache.address_streaming = {file: file, addr: addr};
                     socket.emit('address_streaming', {file: file, addr: addr});
                 });
+            });
+            
+            //Player options
+            socket.on('start_player', function(url){
+                omxplayer.play(url);
             });
         });
     }

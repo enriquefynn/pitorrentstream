@@ -13,6 +13,7 @@ function command_factory(command){
 module.exports={
     play: function(url){
         kill_player();
+console.log('starting with', url);
         omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
     },
 	

@@ -48,7 +48,8 @@
             <a ng-href="{{torrent.address_streaming}}" target="_blank">{{torrent.selected_file}}</a>
             <br>
             <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default" aria-label="Play">
+                <button type="button" class="btn btn-default"
+                        aria-label="Play" ng-click="torrent.start_player()">
                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-default" aria-label="Pause">

@@ -1,5 +1,5 @@
 'use strict';
-var spawn = require('child_process').spawn;
+var spawn = require('child_process').spawnSync;
 var omx;
 
 function kill_player(){
@@ -13,8 +13,12 @@ function command_factory(command){
 module.exports={
     play: function(url){
         kill_player();
-console.log('starting with', url);
-        omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
+        try{
+            omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
+        }
+        catch(err){
+            console.error(err);
+        }
     },
 	
 	pause: command_factory('p'),

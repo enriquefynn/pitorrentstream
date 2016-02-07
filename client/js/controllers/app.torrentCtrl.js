@@ -8,7 +8,7 @@ function sort_number(a, b)
 
 app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 {
-    self = this;
+    var self = this;
     self.server_status = {status: 'Disconnected', class: 'error'};
     self.files = [];
     self.selected_file = undefined;
@@ -173,11 +173,5 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             }
         }
     };
-
-    this.start_player = function()
-    {
-        socket.emit('start_player', self.address_streaming);
-    }
-
 }]);
 

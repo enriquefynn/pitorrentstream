@@ -6,16 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <title>Torrent Streaming</title>
-
-        <script src="js/jquery.min.js"></script>
-        <script src="./js/bower_components/angular/angular.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/socket.io.js"></script>
-
-        <script src="./js/controllers/app.factory.js"></script>
-        <script src="./js/controllers/app.torrentCtrl.js"></script>
-        <script src="./js/controllers/controllers.js"></script>
-
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
     </head>
@@ -42,23 +32,26 @@
                 </div>
             </div>
         </h4>
-        <div ng-show="torrent.selected_file != undefined">
+        <div ng-show="torrent.selected_file != undefined" ng-controller="playerCtrl as player">
             <h3>Currently streaming:</h3>
             <br>
             <a ng-href="{{torrent.address_streaming}}" target="_blank">{{torrent.selected_file}}</a>
             <br>
             <div class="btn-group" role="group" aria-label="...">
                 <button type="button" class="btn btn-default"
-                        aria-label="Play" ng-click="torrent.start_player()">
+                    aria-label="Play" ng-click="player.start(torrent.address_streaming)">
                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-default" aria-label="Pause">
+                <button type="button" class="btn btn-default" 
+                    aria-label="Pause" ng-click="player.pause()">
                     <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                 </button>
-                 <button type="button" class="btn btn-default" aria-label="StepBackward">
+                <button type="button" class="btn btn-default" 
+                     aria-label="StepBackward" ng-click="player.backward()">
                      <span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span>
                 </button>
-                 <button type="button" class="btn btn-default" aria-label="StepForward">
+                <button type="button" class="btn btn-default" 
+                     aria-label="StepForward" ng-click="player.forward()">
                      <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
                 </button>
             </div>
@@ -77,5 +70,15 @@
                 </div>
             </ul>
         </div>
+
+        <script src="js/jquery.min.js"></script>
+        <script src="./js/bower_components/angular/angular.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/socket.io.js"></script>
+
+        <script src="./js/controllers/app.factory.js"></script>
+        <script src="./js/controllers/app.torrentCtrl.js"></script>
+        <script src="./js/controllers/app.playerCtrl.js"></script>
+        <script src="./js/controllers/controllers.js"></script>
     </body>
 </html>

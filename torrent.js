@@ -8,6 +8,7 @@ var fs = require('fs');
 var promise = require('bluebird');
 
 var engine;
+var stream_server;
 
 module.exports = { 
     create : function(magnet, cb){
@@ -54,8 +55,8 @@ module.exports = {
             if (filename == engine.files[file_i].name)
                 break;
 
-        var server = http.createServer();
-        server.on('request', function(request, response){
+        stream_server = http.createServer();
+        stream_server.on('request', function(request, response){
 
             if (request.headers.origin) 
                 response.setHeader('Access-Control-Allow-Origin', 
@@ -70,8 +71,8 @@ module.exports = {
             pump(engine.files[file_i].createReadStream(), response)
         });
         //Start in a random port
-        server.listen(0, 'localhost', function(){
-            promise_to_stream.resolve(server.address());
+        stream_server.listen(0, 'localhost', function(){
+            promise_to_stream.resolve(stream_server.address());
         });
         return promise_to_stream.promise;
     }

@@ -10,10 +10,11 @@ var IO = function(app, config){
     var io = require('socket.io')(app);
     var filesP;
     var timeout;
+    var streamP;
+    var cache = {files: {}};
     try{
         io.on('connection', function(socket){
             socket.emit('info', {status: 'Connected', class: 'success'});
-            var cache = {files: {}};
 
             try{
                 if (filesP.isFulfilled())
@@ -56,7 +57,11 @@ var IO = function(app, config){
             });
 
             socket.on('begin_stream', function(file){
-                torrent.begin_stream(file).then(console.log);
+                streamP = torrent.begin_stream(file);
+                streamP.then(function(addr){
+                    cache.address_streaming = {file: file, addr: addr};
+                    socket.emit('address_streaming', {file: file, addr: addr});
+                });
             });
         });
     }

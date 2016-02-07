@@ -80,11 +80,19 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             self.selected_file.fetch = true;
             self.download(self.selected_file);
         }
+        if (cache.address_streaming != undefined)
+        {
+            self.address_streaming = 'http://' + 
+                cache.address_streaming.addr.address + ':' + 
+                cache.address_streaming.addr.port;
+            self.selected_file = cache.address_streaming.file;
+        }
+
+
     });
 
     socket.on('piece', function(data)
     {
-        //console.log(data);
         for(var file in self.files)
         {
              if (data.piece >= self.files[file].startPiece && data.piece <= self.files[file].endPiece)
@@ -97,6 +105,14 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
         self.download_speed = data.speed.toLowerCase() + '/s';
     });
 
+    socket.on('address_streaming', function(file_addr){
+        self.address_streaming = 'http://' + file_addr.addr.address + 
+            ':' + file_addr.addr.port;
+        self.selected_file = file_addr.file;
+        console.log(self.selected_file);
+
+    });
+
     this.start = function(magnet)
     {
         socket.emit('start', magnet);
@@ -104,14 +120,12 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     
     this.select = function(file)
     {
-        self.selected_file = file;
         file.fetch = true;
         self.download(file);
     };
 
     this.begin_stream = function(file)
     {
-        console.log('streaming', file);
         socket.emit('begin_stream', file);
     };
 

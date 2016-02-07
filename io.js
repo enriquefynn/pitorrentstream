@@ -56,7 +56,7 @@ var IO = function(app, config){
             });
 
             socket.on('begin_stream', function(file){
-                torrent.begin_stream(file);
+                torrent.begin_stream(file).then(console.log);
             });
         });
     }

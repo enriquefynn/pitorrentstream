@@ -48,6 +48,7 @@ module.exports = {
     },
 
     begin_stream: function(filename){
+        var promise_to_stream = promise.defer();
         var file_i = 0;
         for (; file_i < engine.files.length; ++file_i)
             if (filename == engine.files[file_i].name)
@@ -68,6 +69,10 @@ module.exports = {
             response.setHeader('Content-Length', engine.files[file_i].length);
             pump(engine.files[file_i].createReadStream(), response)
         });
-        server.listen(8081, 'localhost');
+        //Start in a random port
+        server.listen(0, 'localhost', function(){
+            promise_to_stream.resolve(server.address());
+        });
+        return promise_to_stream.promise;
     }
 };

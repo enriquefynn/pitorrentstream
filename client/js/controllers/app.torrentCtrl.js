@@ -10,7 +10,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 {
     self = this;
     self.server_status = {status: 'Disconnected', class: 'error'};
-    self.files = [];
+    self.files = {};
     self.selected_file = undefined;
     self.fetch_all = false;
 
@@ -42,13 +42,11 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
         self.files = cache.files;
         self.compute_n_of_files();
         var sizes = [];
-        var names = [];
         for(var file in self.files)
         {
             self.files[file].completed = calc_completed(file);
             self.files[file].fetch = false;
             sizes.push(self.files[file].length);
-            names.push(self.files[file].name);
         }
         if(self.n_of_files > 0)
         {
@@ -59,12 +57,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
                 sizes.sort(sort_number);
                 var l = (sizes.length - 1);
                 var sl = l - 1;
-                if(sizes[sl] >= (0.9 * sizes[l]))
-                {
-                    names.sort();
-                    self.selected_file = self.files[names[0]]
-                }
-                else
+                if(sizes[sl] < (0.5 * sizes[l]))
                 {
                     for(var file in self.files)
                         if(self.files[file].length == sizes[l])
@@ -101,17 +94,11 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     {
         socket.emit('start', magnet);
     };
-    
-    this.select = function(file)
-    {
-        self.selected_file = file;
-        file.fetch = true;
-        self.download(file);
-    };
 
     this.begin_stream = function(file)
     {
         self.selected_file = file;
+        file.fetch = true;
         console.log('streaming', file.name);
         socket.emit('begin_stream', file.name);
     };
@@ -154,14 +141,13 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     {
         for(var file in self.files)
         {
-            if(file != self.selected_file.name)
-            {
-                self.files[file].fetch = self.fetch_all;
-                if(self.fetch_all)
-                    self.download(self.files[file]);
-                else
-                    self.pause(self.files[file]);
-            }
+            if(self.selected_file != undefined && self.selected_file.name == file)
+                continue;
+            self.files[file].fetch = self.fetch_all;
+            if(self.fetch_all)
+                self.download(self.files[file]);
+            else
+                self.pause(self.files[file]);
         }
     };
 }]);

@@ -111,8 +111,9 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     this.begin_stream = function(file)
     {
-        console.log('streaming', file);
-        socket.emit('begin_stream', file);
+        self.selected_file = file;
+        console.log('streaming', file.name);
+        socket.emit('begin_stream', file.name);
     };
 
     this.download = function(file)
@@ -158,6 +159,8 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
                 self.files[file].fetch = self.fetch_all;
                 if(self.fetch_all)
                     self.download(self.files[file]);
+                else
+                    self.pause(self.files[file]);
             }
         }
     };

@@ -74,7 +74,7 @@
                             <input type="checkbox" aria-label="..." ng-model="file.fetch" ng-change="torrent.fetch_toggle(file)">Fetch
                         </span>
                         <div class="btn-group" role="group" style="width: 100%">
-                            <button class="btn btn-default" type="button" ng-click="torrent.begin_stream(file.name)">Stream: {{file.name}}</button>
+                            <button class="btn btn-default" type="button" ng-click="torrent.begin_stream(file)">Stream: {{file.name}}</button>
                             <button class="btn btn-default" type="button" ng-click="torrent.remove(file)" aria-label="Remove">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>

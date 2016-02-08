@@ -1,8 +1,12 @@
 'use strict';
 
 var torrent_stream = require('torrent-stream');
+var http = require('http');
+var pump = require('pump');
+var mime = require('mime');
 var fs = require('fs');
 var promise = require('bluebird');
+
 var engine;
 
 module.exports = { 
@@ -51,4 +55,28 @@ module.exports = {
                 break;
             }
     },
-}
+
+    begin_stream: function(filename){
+        var file_i = 0;
+        for (; file_i < engine.files.length; ++file_i)
+            if (filename == engine.files[file_i].name)
+                break;
+
+        var server = http.createServer();
+        server.on('request', function(request, response){
+
+            if (request.headers.origin) 
+                response.setHeader('Access-Control-Allow-Origin', 
+                    request.headers.origin);
+
+            response.setHeader('Accept-Ranges', 'bytes');
+            response.setHeader('Content-Type', mime.lookup(engine.files[file_i].name));
+            response.setHeader('transferMode.dlna.org', 'Streaming');
+            response.setHeader('contentFeatures.dlna.org',
+            'DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=017000 00000000000000000000000000');
+            response.setHeader('Content-Length', engine.files[file_i].length);
+            pump(engine.files[file_i].createReadStream(), response)
+        });
+        server.listen(8081, 'localhost');
+    }
+};

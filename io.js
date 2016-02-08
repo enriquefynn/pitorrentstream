@@ -58,6 +58,9 @@ var IO = function(app, config){
             socket.on('deselect_file', function(file){
                 torrent.deselect_file(file);
             });
+            socket.on('begin_stream', function(file){
+                torrent.begin_stream(file);
+            });
         });
     }
     catch(err){

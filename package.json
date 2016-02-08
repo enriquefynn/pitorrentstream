@@ -23,7 +23,9 @@
   "homepage": "https://github.com/enriquefynn/pitorrentstream#readme",
   "dependencies": {
     "bluebird": "^3.1.1",
+    "mime": "^1.3.4",
     "numeral": "^1.5.3",
+    "pump": "^1.0.1",
     "socket.io": "^1.4.3",
     "torrent-stream": "enriquefynn/torrent-stream.git"
   }

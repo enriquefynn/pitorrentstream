@@ -69,21 +69,26 @@
             </h3>
             <!--<ul class="list-group">-->
                 <div ng-repeat="file in torrent.files | orderObjectBy: 'name'">
+                <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-5">
                         <h4>{{file.name}}</h4>
                         <button ng-click="torrent.begin_stream(file)" ng-show="torrent.selected_file != file" class="btn btn-primary">Stream <span class="glyphicon glyphicon-film"></span></button>
                         <button ng-click="torrent.move_to_top()" ng-show="torrent.selected_file == file" class="btn btn-success">Streaming! <span class="glyphicon glyphicon-film"></span></button>
                         <button ng-show="torrent.selected_file != file && !file.fetch" ng-click="torrent.fetch_toggle(file)" class="btn btn-primary">Pre-fetch <span class="glyphicon glyphicon-download"></span></button>
                         <button ng-show="torrent.selected_file != file && file.fetch" ng-click="torrent.fetch_toggle(file)" class="btn btn-info">Cancel pre-fetch <span class="glyphicon glyphicon-download"></span></button>
+                </div>
+                <br>
+                <div class="row">
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{file.completed}}%;">{{file.completed}}%
                             </div>
                         </div>
+                </div>
                         <hr>
                     </div>
                 </div>
                 </div>
+            </div>
             <!--</ul>-->
         </div>
     </body>

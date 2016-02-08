@@ -18,7 +18,6 @@
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 
     </head>
     <body ng-controller="torrentCtrl as torrent">
@@ -45,9 +44,7 @@
             </div>
         </h4>
         <div ng-show="torrent.selected_file != undefined">
-            <h3>Currently streaming:</h3>
-            <br>
-            {{torrent.selected_file.name}}
+            <h3>Currently streaming {{torrent.selected_file.name}}</h3>
             <br>
             <div class="btn-group" role="group" aria-label="...">
                 <button type="button" class="btn btn-default" aria-label="Play">
@@ -65,27 +62,28 @@
             </div>
         </div>
         <div ng-show="torrent.n_of_files > 0">
-            <h3>Download list:</h3>
-            <input type="checkbox" ng-model="torrent.fetch_all" ng-change="torrent.fetch_all_toggle()">Fetch all</input>
-            <ul class="list-group">
+            <hr>
+            <h3>Available files 
+                        <button ng-show="!torrent.fetch_all" ng-click="torrent.fetch_all_toggle()" class="btn btn-primary">Pre-fetch all files <span class="glyphicon glyphicon-download"></span></button>
+                        <button ng-show="torrent.fetch_all" ng-click="torrent.fetch_all_toggle()" class="btn btn-info">Cancel pre-fetch all files<span class="glyphicon glyphicon-download"></span></button>
+            </h3>
+            <!--<ul class="list-group">-->
                 <div ng-repeat="file in torrent.files | orderObjectBy: 'name'">
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <input type="checkbox" aria-label="..." ng-model="file.fetch" ng-change="torrent.fetch_toggle(file)">Fetch
-                        </span>
-                        <div class="btn-group" role="group" style="width: 100%">
-                            <button class="btn btn-default" type="button" ng-click="torrent.begin_stream(file)">Stream: {{file.name}}</button>
-                            <button class="btn btn-default" type="button" ng-click="torrent.remove(file)" aria-label="Remove">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{file.completed}}%;">{{file.completed}}%
+                <div class="row">
+                    <div class="col-md-5">
+                        <h4>{{file.name}}</h4>
+                        <button ng-click="torrent.begin_stream(file)" ng-show="torrent.selected_file != file" class="btn btn-primary">Stream <span class="glyphicon glyphicon-film"></span></button>
+                        <button ng-click="torrent.move_to_top()" ng-show="torrent.selected_file == file" class="btn btn-success">Streaming! <span class="glyphicon glyphicon-film"></span></button>
+                        <button ng-show="torrent.selected_file != file && !file.fetch" ng-click="torrent.fetch_toggle(file)" class="btn btn-primary">Pre-fetch <span class="glyphicon glyphicon-download"></span></button>
+                        <button ng-show="torrent.selected_file != file && file.fetch" ng-click="torrent.fetch_toggle(file)" class="btn btn-info">Cancel pre-fetch <span class="glyphicon glyphicon-download"></span></button>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{file.completed}}%;">{{file.completed}}%
+                            </div>
                         </div>
                     </div>
                 </div>
-            </ul>
+                </div>
+            <!--</ul>-->
         </div>
     </body>
 </html>

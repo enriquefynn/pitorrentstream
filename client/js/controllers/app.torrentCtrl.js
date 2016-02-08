@@ -39,7 +39,14 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     socket.on('cache', function(cache)
     {
         self.server_status = {status: 'Connected', class: 'success'};
+        self.fetch_all = false;
         self.files = cache.files;
+        //gui test
+        //self.files["file1"] = {name: "file1", fetch: false, pieces: []};
+        //self.files["file2"] = {name: "file2", fetch: false, pieces: []};
+        //self.files["file3"] = {name: "file3", fetch: false, pieces: []};
+        //self.files["file4"] = {name: "file4", fetch: false, pieces: []};
+        //self.files["file5"] = {name: "file5", fetch: false, pieces: []};
         self.compute_n_of_files();
         var sizes = [];
         for(var file in self.files)
@@ -97,10 +104,16 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     this.begin_stream = function(file)
     {
+        if(self.selected_file != undefined)
+        {
+            self.selected_file.fetch = false;
+            self.fetch_all = false;
+        }
         self.selected_file = file;
         file.fetch = true;
         console.log('streaming', file.name);
         socket.emit('begin_stream', file.name);
+        self.move_to_top();
     };
 
     this.download = function(file)
@@ -121,6 +134,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     this.fetch_toggle = function(file)
     {
+        file.fetch = !file.fetch;
         if(file.fetch)
             self.download(file)
         else
@@ -128,9 +142,18 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             self.pause(file)
             self.fetch_all = false;
             if(file == self.selected_file)
-                self.selected_file = undefined;
+            {
+                //TODO: decide what to do in this case
+                alert("Cannot cancel pre-fetch for file selected to stream");
+                //self.selected_file = undefined;
+            }
         }
     };
+
+    this.move_to_top = function()
+    {
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    }
 
     this.compute_n_of_files = function()
     {
@@ -139,6 +162,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     this.fetch_all_toggle = function()
     {
+        self.fetch_all = !self.fetch_all;
         for(var file in self.files)
         {
             if(self.selected_file != undefined && self.selected_file.name == file)

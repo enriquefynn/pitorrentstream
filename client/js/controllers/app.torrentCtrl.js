@@ -121,6 +121,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     this.remove = function(file)
     {
+        delete self.files[file.name];
         //socket.emit('remove_file', file.name);
     };
 

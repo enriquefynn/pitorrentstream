@@ -42,4 +42,13 @@ module.exports = {
                 break;
             }
     },
+
+    deselect_file : function(filename){
+        for (var i = 0; i < engine.files.length; ++i)
+            if (filename == engine.files[i].name)
+            {
+                engine.files[i].deselect();
+                break;
+            }
+    },
 }

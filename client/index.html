@@ -44,7 +44,10 @@
             </div>
         </h4>
         <div ng-show="torrent.selected_file != undefined">
-            <h3>Currently streaming {{torrent.selected_file.name}}</h3>
+            <h3>Currently streaming {{torrent.selected_file.name}}
+            <button ng-click="torrent.set_watch_on_browser(true)" ng-show="!torrent.watch_on_browser" class="btn btn-primary">Watch on browser <span class="glyphicon glyphicon-film"></span></button>
+            <button ng-click="torrent.set_watch_on_browser(false)" ng-show="torrent.watch_on_browser" class="btn btn-info">Watch on TV <span class="glyphicon glyphicon-film"></span></button>
+            </h3>
             <br>
             <div class="btn-group" role="group" aria-label="...">
                 <button type="button" class="btn btn-default" aria-label="Play">

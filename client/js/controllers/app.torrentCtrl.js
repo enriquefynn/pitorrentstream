@@ -13,6 +13,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     self.files = {};
     self.selected_file = undefined;
     self.fetch_all = false;
+    self.watch_on_browser = false;
 
     function calc_completed(file)
     {
@@ -40,13 +41,14 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     {
         self.server_status = {status: 'Connected', class: 'success'};
         self.fetch_all = false;
+        self.watch_on_browser = false;
         self.files = cache.files;
         //gui test
-        //self.files["file1"] = {name: "file1", fetch: false, pieces: []};
-        //self.files["file2"] = {name: "file2", fetch: false, pieces: []};
-        //self.files["file3"] = {name: "file3", fetch: false, pieces: []};
-        //self.files["file4"] = {name: "file4", fetch: false, pieces: []};
-        //self.files["file5"] = {name: "file5", fetch: false, pieces: []};
+        self.files["file1"] = {name: "file1", fetch: false, pieces: []};
+        self.files["file2"] = {name: "file2", fetch: false, pieces: []};
+        self.files["file3"] = {name: "file3", fetch: false, pieces: []};
+        self.files["file4"] = {name: "file4", fetch: false, pieces: []};
+        self.files["file5"] = {name: "file5", fetch: false, pieces: []};
         self.compute_n_of_files();
         var sizes = [];
         for(var file in self.files)
@@ -158,6 +160,13 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     this.compute_n_of_files = function()
     {
         self.n_of_files = Object.keys(self.files).length;
+    }
+
+    this.set_watch_on_browser = function(flag)
+    {
+        self.watch_on_browser = flag;
+        if(flag)
+            ;//make it run on browser
     }
 
     this.fetch_all_toggle = function()

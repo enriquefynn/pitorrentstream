@@ -30,6 +30,7 @@
         </div>
         </form>
         <h4>
+            <div class="container-fluid">
             <div class="alert row" role="alert" 
                 ng-class="{'alert-success' : torrent.server_status.class == 'success',
                 'alert-danger' : torrent.server_status.class == 'error',
@@ -41,6 +42,7 @@
                 <div class="col-xs-6 text-right">
                     Speed: {{torrent.download_speed || '0kb/s'}}
                 </div>
+            </div>
             </div>
         </h4>
         <div ng-show="torrent.selected_file != undefined" ng-controller="playerCtrl as player">
@@ -81,21 +83,27 @@
             </h3>
             <!--<ul class="list-group">-->
                 <div ng-repeat="file in torrent.files | orderObjectBy: 'name'">
-                <div class="container-fluid" style="outline: 1px dashed orange">
+                <div class="container-fluid" style="margin-left: 1%; margin-right: 5%">
                 <div class="row">
+                    <span class="col-md-8">
                         <h4>{{file.name}}</h4>
-                        <button ng-click="torrent.begin_stream(file)" ng-show="torrent.selected_file != file" class="btn btn-primary">Stream <span class="glyphicon glyphicon-film"></span></button>
-                        <button ng-click="torrent.move_to_top()" ng-show="torrent.selected_file == file" class="btn btn-success">Streaming! <span class="glyphicon glyphicon-film"></span></button>
+                    </span>
+                    <span ng-show="torrent.selected_file != file" class="col-md-1 pull-right">
                         <button ng-show="torrent.selected_file != file && !file.fetch" ng-click="torrent.fetch_toggle(file)" class="btn btn-primary">Pre-fetch <span class="glyphicon glyphicon-download"></span></button>
                         <button ng-show="torrent.selected_file != file && file.fetch" ng-click="torrent.fetch_toggle(file)" class="btn btn-info">Cancel pre-fetch <span class="glyphicon glyphicon-download"></span></button>
+                    </span>
+                    <span  class="col-md-1 pull-right">
+                        <button ng-show="torrent.selected_file != file" ng-click="torrent.begin_stream(file)"  class="btn btn-primary">Stream <span class="glyphicon glyphicon-film"></span></button>
+                        <button ng-show="torrent.selected_file == file" ng-click="torrent.move_to_top()" class="btn btn-success">Streaming <span class="glyphicon glyphicon-film"></span></button>
+                    </span>
                 </div>
-                <br>
                 <div class="row">
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{file.completed}}%;">{{file.completed}}%
                             </div>
                         </div>
                 </div>
+                <hr>
                 </div>
                 </div>
                 </div>

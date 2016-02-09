@@ -44,11 +44,11 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
         self.watch_on_browser = false;
         self.files = cache.files;
         //gui test
-        self.files["file1"] = {name: "file1", fetch: false, pieces: []};
-        self.files["file2"] = {name: "file2", fetch: false, pieces: []};
-        self.files["file3"] = {name: "file3", fetch: false, pieces: []};
-        self.files["file4"] = {name: "file4", fetch: false, pieces: []};
-        self.files["file5"] = {name: "file5", fetch: false, pieces: []};
+        //self.files["file1"] = {name: "file1", fetch: false, pieces: []};
+        //self.files["file2"] = {name: "file2", fetch: false, pieces: []};
+        //self.files["file3"] = {name: "file3", fetch: false, pieces: []};
+        //self.files["file4"] = {name: "file4", fetch: false, pieces: []};
+        //self.files["file5"] = {name: "file5", fetch: false, pieces: []};
         self.compute_n_of_files();
         var sizes = [];
         for(var file in self.files)

@@ -60,7 +60,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
         if(self.n_of_files > 0)
         {
             if(self.n_of_files == 1)
-                self.selected_file = self.files[self.n_of_files - 1].name;
+                self.selected_file = self.files[self.n_of_files - 1];
             else
             {
                 sizes.sort(sort_number);
@@ -71,7 +71,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
                     for(var file in self.files)
                         if(self.files[file].length == sizes[l])
                         {
-                            self.selected_file = self.files[file].name;
+                            self.selected_file = self.files[file];
                             break;
                         }
                 }
@@ -82,12 +82,12 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             self.selected_file.fetch = true;
             self.download(self.selected_file);
         }
-        if (cache.address_streaming != undefined)
+        if(cache.address_streaming != undefined)
         {
-            self.address_streaming = 'http://' + 
+            self.address_streaming = 'http://' +
                 cache.address_streaming.addr.address + ':' + 
                 cache.address_streaming.addr.port;
-            self.selected_file = cache.address_streaming.file;
+            //self.selected_file = cache.address_streaming.file;
         }
     });
 
@@ -108,7 +108,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     socket.on('address_streaming', function(file_addr){
         self.address_streaming = 'http://' + file_addr.addr.address + 
             ':' + file_addr.addr.port;
-        self.selected_file = file_addr.file;
+        //self.selected_file = file_addr.file;
 
     });
 

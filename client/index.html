@@ -51,11 +51,11 @@
             </h3>
             <br>
             <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default"
+                <button ng-show="!player.is_playing" type="button" class="btn btn-default"
                     aria-label="Play" ng-click="player.start(torrent.address_streaming)">
                     <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="btn btn-default" 
+                <button ng-show="player.is_playing" type="button" class="btn btn-default" 
                     aria-label="Pause" ng-click="player.pause()">
                     <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                 </button>
@@ -66,6 +66,10 @@
                 <button type="button" class="btn btn-default" 
                      aria-label="StepForward" ng-click="player.forward()">
                      <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" 
+                     aria-label="Stop" ng-click="player.stop()">
+                     <span class="glyphicon glyphicon-stop" aria-hidden="true"></span>
                 </button>
             </div>
         </div>

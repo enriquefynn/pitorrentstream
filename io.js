@@ -57,6 +57,9 @@ var IO = function(app, config){
                 torrent.select_file(file);
             });
 
+            socket.on('deselect_file', function(file){
+                torrent.deselect_file(file);
+            });
             socket.on('begin_stream', function(file){
                 streamP = torrent.begin_stream(file);
                 streamP.then(function(addr){

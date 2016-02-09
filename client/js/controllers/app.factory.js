@@ -1,7 +1,7 @@
 var app = angular.module('app.factory', []);
 
 app.factory('socket', ['$rootScope', function($rootScope){
-    var socket = io('http://pitorrent.local:8080');
+    var socket = io('http://localhost:8080');
     return {
         on: function(eventName, callback){
             socket.on(eventName, function(){  

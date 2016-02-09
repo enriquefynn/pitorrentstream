@@ -10,9 +10,10 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 {
     var self = this;
     self.server_status = {status: 'Disconnected', class: 'error'};
-    self.files = [];
+    self.files = {};
     self.selected_file = undefined;
     self.fetch_all = false;
+    self.watch_on_browser = false;
 
     function calc_completed(file)
     {
@@ -39,16 +40,22 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     socket.on('cache', function(cache)
     {
         self.server_status = {status: 'Connected', class: 'success'};
+        self.fetch_all = false;
+        self.watch_on_browser = false;
         self.files = cache.files;
+        //gui test
+        self.files["file1"] = {name: "file1", fetch: false, pieces: []};
+        self.files["file2"] = {name: "file2", fetch: false, pieces: []};
+        self.files["file3"] = {name: "file3", fetch: false, pieces: []};
+        self.files["file4"] = {name: "file4", fetch: false, pieces: []};
+        self.files["file5"] = {name: "file5", fetch: false, pieces: []};
         self.compute_n_of_files();
         var sizes = [];
-        var names = [];
         for(var file in self.files)
         {
             self.files[file].completed = calc_completed(file);
             self.files[file].fetch = false;
             sizes.push(self.files[file].length);
-            names.push(self.files[file].name);
         }
         if(self.n_of_files > 0)
         {
@@ -59,12 +66,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
                 sizes.sort(sort_number);
                 var l = (sizes.length - 1);
                 var sl = l - 1;
-                if(sizes[sl] >= (0.9 * sizes[l]))
-                {
-                    names.sort();
-                    self.selected_file = self.files[names[0]].name
-                }
-                else
+                if(sizes[sl] < (0.5 * sizes[l]))
                 {
                     for(var file in self.files)
                         if(self.files[file].length == sizes[l])
@@ -114,63 +116,84 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     {
         socket.emit('start', magnet);
     };
-    
-    this.select = function(file)
-    {
-        file.fetch = true;
-        self.download(file);
-    };
 
     this.begin_stream = function(file)
     {
-        socket.emit('begin_stream', file);
+        if(self.selected_file != undefined)
+        {
+            self.selected_file.fetch = false;
+            self.fetch_all = false;
+        }
+        self.selected_file = file;
+        file.fetch = true;
+        console.log('streaming', file.name);
+        socket.emit('begin_stream', file.name);
+        self.move_to_top();
     };
 
     this.download = function(file)
     {
-       //socket.emit('select_file', file.name);
+       socket.emit('select_file', file.name);
     };
 
     this.pause = function(file)
     {
-        //socket.emit('pause_file', file.name);
+        socket.emit('deselect_file', file.name);
     };
 
     this.remove = function(file)
     {
+        delete self.files[file.name];
         //socket.emit('remove_file', file.name);
     };
 
     this.fetch_toggle = function(file)
     {
+        file.fetch = !file.fetch;
         if(file.fetch)
             self.download(file)
         else
         {
-            //socket.emit('pause_file', file.name);
+            self.pause(file)
             self.fetch_all = false;
             if(file == self.selected_file)
-                self.selected_file = undefined;
+            {
+                //TODO: decide what to do in this case
+                alert("Cannot cancel pre-fetch for file selected to stream");
+                //self.selected_file = undefined;
+            }
         }
     };
+
+    this.move_to_top = function()
+    {
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    }
 
     this.compute_n_of_files = function()
     {
         self.n_of_files = Object.keys(self.files).length;
     }
 
+    this.set_watch_on_browser = function(flag)
+    {
+        self.watch_on_browser = flag;
+        if(flag)
+            ;//make it run on browser
+    }
+
     this.fetch_all_toggle = function()
     {
-        if(self.fetch_all)
+        self.fetch_all = !self.fetch_all;
+        for(var file in self.files)
         {
-            for(var file in self.files)
-            {
-                if(file != self.selected_file)
-                {
-                    self.files[file].fetch = true;
-                    self.download(self.files[file]);
-                }
-            }
+            if(self.selected_file != undefined && self.selected_file.name == file)
+                continue;
+            self.files[file].fetch = self.fetch_all;
+            if(self.fetch_all)
+                self.download(self.files[file]);
+            else
+                self.pause(self.files[file]);
         }
     };
 }]);

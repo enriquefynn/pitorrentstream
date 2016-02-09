@@ -48,6 +48,15 @@ module.exports = {
             }
     },
 
+    deselect_file : function(filename){
+        for (var i = 0; i < engine.files.length; ++i)
+            if (filename == engine.files[i].name)
+            {
+                engine.files[i].deselect();
+                break;
+            }
+    },
+
     begin_stream: function(filename){
         var promise_to_stream = promise.defer();
         var file_i = 0;

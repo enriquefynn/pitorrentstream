@@ -57,6 +57,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             self.files[file].fetch = false;
             sizes.push(self.files[file].length);
         }
+        /*
         if(self.n_of_files > 0)
         {
             if(self.n_of_files == 1)
@@ -82,6 +83,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             self.selected_file.fetch = true;
             self.begin_stream(self.selected_file);
         }
+        */
         if(cache.address_streaming != undefined)
         {
             self.address_streaming = 'http://' +

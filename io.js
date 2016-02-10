@@ -67,13 +67,16 @@ var IO = function(app, config){
                     socket.emit('address_streaming', {file: file, addr: addr});
                 });
             });
-            
+
             //Player options TODO: Move somewhere
             socket.on('start_player', function(url){
                 omxplayer.play(url);
             });
             socket.on('pause_player', function(){
                 omxplayer.pause();
+            });
+            socket.on('stop_player', function(){
+                omxplayer.stop();
             });
             socket.on('forward_player', function(){
                 omxplayer.forward();

@@ -80,14 +80,13 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
         if(self.selected_file != undefined)
         {
             self.selected_file.fetch = true;
-            self.download(self.selected_file);
+            self.begin_stream(self.selected_file);
         }
         if(cache.address_streaming != undefined)
         {
             self.address_streaming = 'http://' +
                 cache.address_streaming.addr.address + ':' + 
                 cache.address_streaming.addr.port;
-            //self.selected_file = cache.address_streaming.file;
         }
     });
 
@@ -108,7 +107,6 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     socket.on('address_streaming', function(file_addr){
         self.address_streaming = 'http://' + file_addr.addr.address + 
             ':' + file_addr.addr.port;
-        //self.selected_file = file_addr.file;
 
     });
 

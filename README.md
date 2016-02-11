@@ -16,6 +16,9 @@ The server should be running, access the server and happy streaming
 * Test whether it's running on RPI or Pine and choose the most suitable player
 * Make it more error-proof
 * Improve UI
+* Insert slider to show and select video position
+* Include option to save files
+* Make it stream on browser
 
 #### TODO far away:
 * App for pine64

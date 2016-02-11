@@ -18,8 +18,9 @@ module.exports={
             var error_code = promise.defer();
             omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
             omx.on('close', function(code){
+                error_code.resolve(code);
             })
-            return error_code;
+            return error_code.promise;
         }
         catch(err){
             console.error(err);

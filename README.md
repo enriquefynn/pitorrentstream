@@ -18,6 +18,8 @@ The server should be running, access the server and happy streaming
 * Improve UI
 * Insert slider to show and select video position
 * Include option to save files
+* Include option to stop streaming delete files
+* Delete files and reset status when new magnet is introduced
 * Make it stream on browser
 
 #### TODO far away:

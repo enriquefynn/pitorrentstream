@@ -4,8 +4,8 @@ var promise = require('bluebird');
 var mplayer;
 
 function kill_player(){
-    command_factory('quit\n')();
-    //spawn('pkill', ['mplayer']);
+    spawn('killall', ['-9', 'mplayer', 'mplayer.bin']);
+    mplayer = undefined;
 }
 
 function command_factory(command){
@@ -22,8 +22,15 @@ module.exports={
             var error_code = promise.defer();
             mplayer = spawn('mplayer', ['-slave', '-quiet', url]);
             mplayer.on('close', function(code){
+                mplayer = undefined;
                 error_code.resolve(code);
             })
+            mplayer.stderr.on('data', function(data){
+                console.error(data.toString());
+            });
+            mplayer.stdout.on('data', function(data){
+                console.log(data.toString());
+            });
             return error_code.promise;
         }
         catch(err){

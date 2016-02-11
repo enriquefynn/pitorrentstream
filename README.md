@@ -13,11 +13,10 @@ Then run:
 The server should be running, access the server and happy streaming
 
 #### TODO List:
-* Support mplayer commands
-* Support omxplayer commands
-* Actually stream torrent, take a look [peerflix](http://github.com/mafintosh/peerflix)
-* Always select next torrent to stream if there's a lot of them
-* Better design
+* Test whether it's running on RPI or Pine and choose the most suitable player
+* Fix MPlayer commands
+* Make it more error-proof
+* Improve UI
 
 #### TODO far away:
 * App for pine64

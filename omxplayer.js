@@ -4,11 +4,15 @@ var promise = require('bluebird');
 var omx;
 
 function kill_player(){
-    spawn('pkill', ['omxplayer']);
+    command_factory('q')();
+    //spawn('pkill', ['omxplayer']);
 }
 
 function command_factory(command){
-	return (function(){omx.stdin.write(command);})
+    return (function(){
+        if(omx != undefined)
+            omx.stdin.write(command);
+    })
 }
 
 module.exports={

@@ -58,6 +58,16 @@ module.exports = {
             }
     },
 
+    stop_stream: function(){
+        var destroyedP = promise.defer();
+        engine.remove( function() {
+            engine.destroy( function() {
+                destroyedP.resolve();
+            });
+        });
+        return destroyedP.promise;
+    },
+
     begin_stream: function(filename){
         var promise_to_stream = promise.defer();
         var file_i = 0;

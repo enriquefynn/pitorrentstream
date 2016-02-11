@@ -70,6 +70,13 @@ var IO = function(app, config){
                     socket.emit('address_streaming', {file: file, addr: addr});
                 });
             });
+            socket.on('stop_stream', function(){
+                var destroyedP =  torrent.stop_stream();
+                destroyedP.then(function(){
+                    cache = {files: {}};
+                    socket.emit('cache', cache);
+                });
+            });
 
             //Player options TODO: Move somewhere
             socket.on('start_player', function(url){

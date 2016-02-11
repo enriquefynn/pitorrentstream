@@ -1,5 +1,6 @@
 'use strict';
 var spawn = require('child_process').spawn;
+var promise = require('bluebird');
 var omx;
 
 function kill_player(){
@@ -14,7 +15,11 @@ module.exports={
     play: function(url){
         kill_player();
         try{
+            var error_code = promise.defer();
             omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
+            omx.on('close', function(code){
+            })
+            return error_code;
         }
         catch(err){
             console.error(err);

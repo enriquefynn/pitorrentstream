@@ -70,7 +70,11 @@ var IO = function(app, config){
 
             //Player options TODO: Move somewhere
             socket.on('start_player', function(url){
-                omxplayer.play(url);
+                var error_code = omxplayer.play(url);
+                error_code.then(function(code){
+                    if (code != 0)
+                        socket.emit('info', {status: 'Player exited with error: ' + code, class:'error'});
+                    });
             });
             socket.on('pause_player', function(){
                 omxplayer.pause();

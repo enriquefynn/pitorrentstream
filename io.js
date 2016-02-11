@@ -72,6 +72,7 @@ var IO = function(app, config){
                 });
             });
             socket.on('stop_stream', function(){
+                players[current_player].stop();
                 var destroyedP =  torrent.stop_stream();
                 destroyedP.then(function(){
                     cache = {files: {}};

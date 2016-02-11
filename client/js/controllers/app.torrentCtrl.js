@@ -1,11 +1,6 @@
 'use strict';
 var app = angular.module('app.torrentCtrl', ['app.factory']);
 
-function sort_number(a, b)
-{
-    return a - b;
-}
-
 app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 {
     var self = this;
@@ -46,49 +41,14 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
         self.watch_on_browser = false;
         self.selected_file = undefined;
         self.files = cache.files;
-        //gui test
-        //self.files["file1"] = {name: "file1", fetch: false, pieces: []};
-        //self.files["file2"] = {name: "file2", fetch: false, pieces: []};
-        //self.files["file3"] = {name: "file3", fetch: false, pieces: []};
-        //self.files["file4"] = {name: "file4", fetch: false, pieces: []};
-        //self.files["file5"] = {name: "file5", fetch: false, pieces: []};
         self.compute_n_of_files();
         if(self.n_of_files == 0)
             self.magnet = '';
-        var sizes = [];
         for(var file in self.files)
         {
             self.files[file].completed = calc_completed(file);
             self.files[file].fetch = false;
-            sizes.push(self.files[file].length);
         }
-        /*
-        if(self.n_of_files > 0)
-        {
-            if(self.n_of_files == 1)
-                self.selected_file = self.files[self.n_of_files - 1];
-            else
-            {
-                sizes.sort(sort_number);
-                var l = (sizes.length - 1);
-                var sl = l - 1;
-                if(sizes[sl] < (0.5 * sizes[l]))
-                {
-                    for(var file in self.files)
-                        if(self.files[file].length == sizes[l])
-                        {
-                            self.selected_file = self.files[file];
-                            break;
-                        }
-                }
-            }
-        }
-        if(self.selected_file != undefined)
-        {
-            self.selected_file.fetch = true;
-            self.begin_stream(self.selected_file);
-        }
-        */
         if(cache.address_streaming != undefined)
         {
             self.address_streaming = 'http://' +

@@ -45,6 +45,7 @@ var IO = function(app, config){
             }
 
             socket.on('start', function(magnet){
+                torrent.remove_files();
                 filesP = torrent.create(magnet, on_download);
                 socket.emit('info', {status: 'Gathering metadata', class:'information'});
                 filesP.then(function(files){

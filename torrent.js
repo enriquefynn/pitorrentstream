@@ -58,6 +58,11 @@ module.exports = {
             }
     },
 
+    remove_files: function(){
+        if(engine != undefined)
+            engine.remove(function(){});
+    },
+
     stop_stream: function(){
         var destroyedP = promise.defer();
         engine.remove( function() {

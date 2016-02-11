@@ -15,7 +15,7 @@ var IO = function(app, config){
     var streamP;
     var cache = {files: {}};
     var players = {'omxplayer': omxplayer, 'mplayer': mplayer};
-    var current_player = 'mplayer';
+    var current_player = 'omxplayer';
     try{
         io.on('connection', function(socket){
             socket.emit('info', {status: 'Connected', class: 'success'});

@@ -14,7 +14,6 @@ The server should be running, access the server and happy streaming
 
 #### TODO List:
 * Test whether it's running on RPI or Pine and choose the most suitable player
-* Fix MPlayer commands
 * Make it more error-proof
 * Improve UI
 

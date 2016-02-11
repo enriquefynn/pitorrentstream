@@ -4,8 +4,8 @@ var promise = require('bluebird');
 var omx;
 
 function kill_player(){
-    command_factory('q')();
-    //spawn('pkill', ['omxplayer']);
+    spawn('killall', ['-9', 'omxplayer', 'omxplayer.bin']);
+    omx = undefined;
 }
 
 function command_factory(command){
@@ -17,18 +17,19 @@ function command_factory(command){
 
 module.exports={
     play: function(url){
-        kill_player();
+	kill_player();
         try{
             var error_code = promise.defer();
             omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
             omx.on('close', function(code){
+		omx = undefined;
                 error_code.resolve(code);
             })
             omx.stderr.on('data', function(data){
-                console.error(data);
+                console.error(data.toString());
             });
             omx.stdout.on('data', function(data){
-                console.log(data);
+                console.log(data.toString());
             });
             return error_code.promise;
         }

@@ -39,9 +39,11 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
 
     socket.on('cache', function(cache)
     {
+        self.download_speed = '0kb'
         self.server_status = {status: 'Connected', class: 'success'};
         self.fetch_all = false;
         self.watch_on_browser = false;
+        self.selected_file = undefined;
         self.files = cache.files;
         //gui test
         //self.files["file1"] = {name: "file1", fetch: false, pieces: []};
@@ -196,5 +198,11 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
                 self.pause(self.files[file]);
         }
     };
+
+    this.stop_stream = function()
+    {
+        socket.emit('stop_stream');
+    }
+
 }]);
 

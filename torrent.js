@@ -4,6 +4,7 @@ var torrent_stream = require('torrent-stream');
 var http = require('http');
 var pump = require('pump');
 var mime = require('mime');
+var rangeParser = require('range-parser')
 var fs = require('fs');
 var promise = require('bluebird');
 
@@ -69,19 +70,32 @@ module.exports = {
         stream_server = http.createServer();
         engine.files[file_i].select();
         stream_server.on('request', function(request, response){
+            var range = request.headers.range;
+            range = range && rangeParser(engine.files[file_i].length, range)[0];
 
-            if (request.headers.origin) 
-                response.setHeader('Access-Control-Allow-Origin', 
-                    request.headers.origin);
+            if(request.headers.origin)
+                response.setHeader('Access-Control-Allow-Origin', request.headers.origin);
 
             response.setHeader('Accept-Ranges', 'bytes');
             response.setHeader('Content-Type', mime.lookup(engine.files[file_i].name));
             response.setHeader('transferMode.dlna.org', 'Streaming');
             response.setHeader('contentFeatures.dlna.org',
             'DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=017000 00000000000000000000000000');
-            response.setHeader('Content-Length', engine.files[file_i].length);
-            pump(engine.files[file_i].createReadStream(), response)
+            if(!range)
+            {
+                response.setHeader('Content-Length', engine.files[file_i].length);
+                if(request.method === 'HEAD') return response.end();
+                pump(engine.files[file_i].createReadStream(), response);
+                return;
+            }
+
+            response.statusCode = 206;
+            response.setHeader('Content-Length', range.end - range.start + 1);
+            response.setHeader('Content-Range', 'bytes ' + range.start + '-' + range.end + '/' + engine.files[file_i].length);
+            if(request.method === 'HEAD') return response.end();
+            pump(engine.files[file_i].createReadStream(range), response);
         });
+
         //Start in a random port
         stream_server.listen(0, 'localhost', function(){
             promise_to_stream.resolve(stream_server.address());

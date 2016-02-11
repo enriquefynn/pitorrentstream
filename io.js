@@ -6,6 +6,7 @@ var torrent = require('./torrent');
 var promise = require('bluebird');
 var numeral = require('numeral');
 var omxplayer = require('./omxplayer');
+var mplayer = require('./mplayer');
 
 var IO = function(app, config){
     var io = require('socket.io')(app);
@@ -13,6 +14,8 @@ var IO = function(app, config){
     var timeout;
     var streamP;
     var cache = {files: {}};
+    var players = {'omxplayer': omxplayer, 'mplayer': mplayer};
+    var current_player = 'mplayer';
     try{
         io.on('connection', function(socket){
             socket.emit('info', {status: 'Connected', class: 'success'});
@@ -70,29 +73,29 @@ var IO = function(app, config){
 
             //Player options TODO: Move somewhere
             socket.on('start_player', function(url){
-                var error_code = omxplayer.play(url);
+                var error_code = players[current_player].play(url);
                 error_code.then(function(code){
                     if (code != 0)
                         socket.emit('info', {status: 'Player exited with error: ' + code, class:'error'});
                     });
             });
             socket.on('pause_player', function(){
-                omxplayer.pause();
+                players[current_player].pause();
             });
             socket.on('stop_player', function(){
-                omxplayer.stop();
+                players[current_player].stop();
             });
             socket.on('forward_player', function(){
-                omxplayer.forward();
+                players[current_player].forward();
             });
             socket.on('backward_player', function(){
-                omxplayer.backward();
+                players[current_player].backward();
             });
             socket.on('volume_up', function(){
-                omxplayer.volume_up();
+                players[current_player].volume_up();
             });
             socket.on('volume_down', function(){
-                omxplayer.volume_down();
+                players[current_player].volume_down();
             });
         });
     }

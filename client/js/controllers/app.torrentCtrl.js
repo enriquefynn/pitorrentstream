@@ -14,6 +14,7 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     self.selected_file = undefined;
     self.fetch_all = false;
     self.watch_on_browser = false;
+    self.magnet = '';
 
     function calc_completed(file)
     {
@@ -52,6 +53,8 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
         //self.files["file4"] = {name: "file4", fetch: false, pieces: []};
         //self.files["file5"] = {name: "file5", fetch: false, pieces: []};
         self.compute_n_of_files();
+        if(self.n_of_files == 0)
+            self.magnet = '';
         var sizes = [];
         for(var file in self.files)
         {

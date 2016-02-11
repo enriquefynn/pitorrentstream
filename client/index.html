@@ -21,9 +21,9 @@
         <link href="css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body ng-controller="torrentCtrl as torrent">
-        <form ng-submit="torrent.start(magnet)">
+        <form ng-submit="torrent.start(torrent.magnet)">
         <div class="input-group input-group-lg">
-            <input ng-model="magnet" type="text" class="form-control" placeholder="Magnet">
+            <input ng-model="torrent.magnet" type="text" class="form-control" placeholder="Magnet">
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-default" type="button">Go!</button>
                 <button ng-show="torrent.n_of_files > 0" ng-click="torrent.stop_stream()" class="btn btn-danger" type="button"> 

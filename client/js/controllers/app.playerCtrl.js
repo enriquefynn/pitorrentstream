@@ -26,12 +26,14 @@ app.controller('playerCtrl', ['$scope', 'socket', function($scope, socket)
     {
         if(!self.started) return;
         socket.emit('forward_player');
+        self.is_playing = true;
     }
 
     self.backward = function()
     {
         if(!self.started) return;
         socket.emit('backward_player');
+        self.is_playing = true;
     }
 
     self.volume_up = function()

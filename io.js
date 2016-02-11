@@ -70,6 +70,7 @@ var IO = function(app, config){
 
             //Player options TODO: Move somewhere
             socket.on('start_player', function(url){
+                        socket.emit('info', {status: 'Player trying to start', class:'information'});
                 var error_code = omxplayer.play(url);
                 error_code.then(function(code){
                     if (code != 0)

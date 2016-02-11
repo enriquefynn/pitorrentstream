@@ -20,6 +20,12 @@ module.exports={
             omx.on('close', function(code){
                 error_code.resolve(code);
             })
+            omx.stderr.on('data', function(data){
+                console.error(data);
+            });
+            omx.stdout.on('data', function(data){
+                console.log(data);
+            });
             return error_code.promise;
         }
         catch(err){

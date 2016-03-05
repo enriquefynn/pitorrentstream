@@ -7,15 +7,18 @@ var mime = require('mime');
 var rangeParser = require('range-parser')
 var fs = require('fs');
 var promise = require('bluebird');
+var parseTorrent = require('parse-torrent');
 
 var engine;
 var stream_server;
+var torrent_info;
 
 module.exports = { 
     create : function(magnet, cb){
         var files = promise.defer();
         try{
             engine = torrent_stream(magnet, {path: '/tmp/pi-torrent'});
+            torrent_info = parseTorrent(magnet);
             engine.on('ready', function() {
                 var file_hash = {};
                 engine.files.forEach(function(file){
@@ -71,6 +74,70 @@ module.exports = {
             });
         });
         return destroyedP.promise;
+    },
+
+    get_subtitles: function(filename, lang) {
+        // look for subtitle
+        var promise_subs = promise.defer();
+        if(lang != undefined && lang != '')
+        {
+            var path0 = '/tmp/pi-torrent-subtitles'
+            var path1 = path0 + '/' + torrent_info.infoHash;
+        var subname = path1 + '/' + filename + '-' + lang + '.txt';
+        try {
+            fs.accessSync(subname, fs.F_OK);
+            promise_subs.resolve(subname);
+        } catch(e) {
+            var file_i = 0;
+            for (; file_i < engine.files.length; ++file_i)
+                if (filename == engine.files[file_i].name)
+                    break;
+
+        var gurl = 'http://localhost:8081?hash=' + torrent_info.infoHash + '&name=' + engine.files[file_i].name + '&size=' + engine.files[file_i].length + '&language=en';
+
+        var get_link = promise.defer();
+        http.get(gurl, function(response) {
+            // request subtitle link
+            var subfile = '';
+            response.on('data', function(data) {
+                subfile += data;
+            });
+            response.on('end', function() {
+                get_link.resolve(subfile);
+            });
+            response.on('error', function(code) {
+                promise_subs.reject(code);
+            });
+        });
+        get_link.promise.then(function(subfile) {
+            // download file from link
+            http.get(subfile, function(response) {
+                var prom = promise.defer();
+                var sfile = '';
+                response.on('data', function(data) {
+                    sfile += data;
+                });
+                response.on('end', function() {
+                    // write on file
+                    // try to create folder first
+                    try {
+                        fs.mkdirSync(path0);
+                        fs.mkdirSync(path1);
+                        fs.writeFileSync(subname, sfile);
+                    } catch(e) {
+                        if(e.code != 'EEXIST')
+                            console.log(e);
+                    }
+                    promise_subs.resolve(subname);
+                });
+                response.on('error', function(code) {
+                    promise_subs.reject(code);
+                });
+            });
+        });
+        }
+        }
+        return promise_subs.promise;
     },
 
     begin_stream: function(filename){

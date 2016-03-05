@@ -16,11 +16,11 @@ function command_factory(command){
 }
 
 module.exports={
-    play: function(url){
+    play: function(url, subpath){
     kill_player();
         try{
             var error_code = promise.defer();
-            omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
+            omx = spawn('omxplayer', ['-ohdmi', '-r', url, '--subtitles', subpath]);
             omx.on('close', function(code){
                 omx = undefined;
                 error_code.resolve(code);

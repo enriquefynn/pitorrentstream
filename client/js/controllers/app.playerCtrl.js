@@ -8,9 +8,9 @@ app.controller('playerCtrl', ['$scope', 'socket', function($scope, socket)
     self.started = false;
     self.is_playing = false;
 
-    self.start = function(address_streaming)
+    self.start = function(address_streaming, lang, fname)
     {
-        socket.emit('start_player', address_streaming);
+        socket.emit('start_player', {url: address_streaming, lang: lang, fname: fname});
         self.started = true;
         self.is_playing = true;
     }

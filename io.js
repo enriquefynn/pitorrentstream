@@ -13,6 +13,7 @@ var IO = function(app, config){
     var filesP;
     var timeout;
     var streamP;
+    var subsP;
     var cache = {files: {}};
     var players = {'omxplayer': omxplayer, 'mplayer': mplayer};
     var current_player = 'omxplayer';
@@ -64,6 +65,21 @@ var IO = function(app, config){
             socket.on('deselect_file', function(file){
                 torrent.deselect_file(file);
             });
+
+            socket.on('get_subtitles', function(data){
+                var fname = data.name;
+                var lang = data.lang;
+                subsP = torrent.get_subtitles(fname, lang);
+                subsP.then(function(sfile){
+                    if(!('subtitles' in cache.files[fname]))
+                        cache.files[fname].subtitles = {};
+                    cache.files[fname].subtitles[lang] = sfile;
+                    socket.emit('subtitle');
+                }).catch(function(error) {
+                    socket.emit('subtitle_fail');
+                });
+            });
+
             socket.on('begin_stream', function(file){
                 streamP = torrent.begin_stream(file);
                 streamP.then(function(addr){
@@ -71,6 +87,7 @@ var IO = function(app, config){
                     socket.emit('address_streaming', {file: file, addr: addr});
                 });
             });
+
             socket.on('stop_stream', function(){
                 players[current_player].stop();
                 var destroyedP =  torrent.stop_stream();
@@ -81,9 +98,15 @@ var IO = function(app, config){
             });
 
             //Player options TODO: Move somewhere
-            socket.on('start_player', function(url){
+            socket.on('start_player', function(data){
+                        var url = data.url;
+                        var lang = data.lang;
+                        var fname = data.fname;
                         socket.emit('info', {status: 'Player trying to start', class:'information'});
-                var error_code = players[current_player].play(url);
+                        var subpath = '';
+                        if(lang != undefined && lang != '')
+                            subpath = cache.files[fname].subtitles[lang];
+                var error_code = players[current_player].play(url, subpath);
                 error_code.then(function(code){
                     if (code != 0)
                         socket.emit('info', {status: 'Player exited with error: ' + code, class:'error'});

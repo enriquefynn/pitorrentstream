@@ -19,6 +19,16 @@
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+
+        <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>
+
     </head>
     <body ng-controller="torrentCtrl as torrent">
         <form ng-submit="torrent.start(torrent.magnet)">
@@ -57,7 +67,7 @@
             <br>
             <div class="btn-group" role="group" aria-label="...">
                 <button type="button" class="btn btn-default"
-                    aria-label="Start" ng-click="player.start(torrent.address_streaming)">
+                    aria-label="Start" ng-click="player.start(torrent.address_streaming, torrent.lang, torrent.selected_file.name)">
                     <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span>
                 </button>
 
@@ -91,6 +101,22 @@
                     aria-label="VolumeUp" ng-click="player.volume_up()">
                     <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
                 </button>
+            </div>
+            <select class="selectpicker" ng-model="torrent.lang" ng-change="torrent.lang_change()">
+                <option value="">Subtitles</option>
+                <option value="">None</option>
+                <option value="{{key}}" ng-repeat="(key,obj) in torrent.languages">{{obj}}</option>
+            </select>
+            <div ng-show="torrent.lang != ''">
+                <span ng-show="torrent.has_subtitle == 0">
+                Searching for {{ torrent.languages[torrent.lang] }} subtitles for file {{ torrent.subs_file }}
+                </span>
+                <span ng-show="torrent.has_subtitle == 1">
+                {{ torrent.languages[torrent.lang] }} subtitles found for file {{ torrent.subs_file }}
+                </span>
+                <span ng-show="torrent.has_subtitle == -1">
+                {{ torrent.languages[torrent.lang] }} subtitles were not found for file {{ torrent.subs_file }}
+                </span>
             </div>
         </div>
         <div ng-show="torrent.n_of_files > 0">

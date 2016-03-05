@@ -10,6 +10,9 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
     self.fetch_all = false;
     self.watch_on_browser = false;
     self.magnet = '';
+    self.lang = '';
+    self.has_subtitle = 0;
+    self.languages = {'en':'English', 'es':'Espanol', 'pt':'Portugues', 'de':'Deutsch', 'it':'Italiano'};
 
     function calc_completed(file)
     {
@@ -76,6 +79,25 @@ app.controller('torrentCtrl', ['$scope', 'socket', function($scope, socket)
             ':' + file_addr.addr.port;
 
     });
+
+    socket.on('subtitle', function()
+    {
+        self.has_subtitle = 1;
+    });
+
+    socket.on('subtitle_fail', function()
+    {
+        self.has_subtitle = -1;
+    });
+
+    this.lang_change = function()
+    {
+        if(self.lang != undefined && self.lang != '')
+        {
+            console.log('Searching ' + self.lang + ' subtitles for file ' + self.selected_file.name);
+            socket.emit('get_subtitles', {name: self.selected_file.name, lang: self.lang});
+        }
+    }
 
     this.start = function(magnet)
     {

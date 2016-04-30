@@ -20,7 +20,11 @@ module.exports={
     kill_player();
         try{
             var error_code = promise.defer();
-            omx = spawn('omxplayer', ['-ohdmi', '-r', url, '--subtitles', subpath]);
+            if(subpath != '')
+                omx = spawn('omxplayer', ['-ohdmi', '-r', url, '--subtitles', subpath]);
+            else
+                omx = spawn('omxplayer', ['-ohdmi', '-r', url]);
+        
             omx.on('close', function(code){
                 omx = undefined;
                 error_code.resolve(code);

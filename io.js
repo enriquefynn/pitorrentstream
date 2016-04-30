@@ -106,11 +106,11 @@ var IO = function(app, config){
                         var subpath = '';
                         if(lang != undefined && lang != '')
                             subpath = cache.files[fname].subtitles[lang];
-                var error_code = players[current_player].play(url, subpath);
-                error_code.then(function(code){
-                    if (code != 0)
-                        socket.emit('info', {status: 'Player exited with error: ' + code, class:'error'});
-                    });
+                        var error_code = players[current_player].play(url, subpath);
+                        error_code.then(function(code){
+                            if (code != 0)
+                                socket.emit('info', {status: 'Player exited with error: ' + code, class:'error'});
+                            });
             });
             socket.on('pause_player', function(){
                 players[current_player].pause();
